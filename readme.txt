@@ -1,8 +1,9 @@
 === LoginRequirePress ===
-Contributors: maratbn.com
-Tags: require login, password protect, security, limit access, control access, members, visitors
+Contributors: maratbn
+Tags: require login, password protect, security, limit access, control access, members, visitors, subscribers
 Requires at least: 3.8.1
 Tested up to: 4.1
+Stable tag: 0.1.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,30 +33,36 @@ Overview:
   and above.
 
   Plugin will still allow unauthenticated downloading of site's feeds, but
-  will filter out any login-requiring posts from the feed listings.
+  will filter out all login-requiring posts from the feed listings.
 
 Technical summary:
 
   Plugin works by hooking-in special logic into the action 'send_headers' to
   redirect unauthenticated client browsers to the site's login page from any
   non-feed page upon detecting any login-requiring post, and by hooking-in
-  another special logic into the filter 'posts_results' to filter out any
-  login-requiring posts from the listing.
+  another special logic into the filter 'posts_results' to filter out all
+  login-requiring posts from all feed page listings.
+
+Official project URLs:
+
+  https://github.com/maratbn/LoginRequirePress
+  https://wordpress.org/plugins/loginrequirepress
+  http://www.maratbn.com/projects/login-require-press
 
 == Installation ==
 
-1. Upload `LoginRequirePress.zip` from the associated release branch to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+1. Unzip contents of `loginrequirepress.zip` into the directory `/wp-content/plugins/loginrequirepress/`.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Where can I ask a question about LoginRequirePress? =
 
-An answer to that question.
+Ask your questions at: https://wordpress.org/support/plugin/loginrequirepress
 
-= What about foo bar? =
+= Where can I post an issue / bug / feature request? =
 
-Answer to foo bar dilemma.
+Post issues / bugs / feature requests at: https://github.com/maratbn/LoginRequirePress/issues
 
 == Screenshots ==
 
@@ -65,3 +72,6 @@ Answer to foo bar dilemma.
 
 = 0.1.0 =
 * Initial release.
+
+= 0.1.1 =
+* Various documentation improvement.

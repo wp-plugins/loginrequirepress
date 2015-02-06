@@ -1,13 +1,14 @@
 --------------------  WordPress plugin LoginRequirePress  --------------------
 
 https://github.com/maratbn/LoginRequirePress
-http://www.maratbn.com/projects/login-require-press/
+https://wordpress.org/plugins/loginrequirepress
+http://www.maratbn.com/projects/login-require-press
 
 Copyright (C) 2015  Marat Nepomnyashy  http://maratbn.com  maratbn@gmail
 
-Version: 0.1.0
+Version: 0.1.1
 
-The installable release is in 'LoginRequirePress.zip' in this branch.
+Latest release ZIP: https://downloads.wordpress.org/plugin/loginrequirepress.latest-stable.zip
 
 Licensed under GPL3.  See LICENSE.
 
@@ -33,12 +34,12 @@ Overview:
   and above.
 
   Plugin will still allow unauthenticated downloading of site's feeds, but
-  will filter out any login-requiring posts from the feed listings.
+  will filter out all login-requiring posts from the feed listings.
 
 Technical summary:
 
   Plugin works by hooking-in special logic into the action 'send_headers' to
   redirect unauthenticated client browsers to the site's login page from any
   non-feed page upon detecting any login-requiring post, and by hooking-in
-  another special logic into the filter 'posts_results' to filter out any
-  login-requiring posts from the listing.
+  another special logic into the filter 'posts_results' to filter out all
+  login-requiring posts from all feed page listings.
