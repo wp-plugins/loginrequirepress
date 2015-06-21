@@ -2,8 +2,8 @@
 Contributors: maratbn
 Tags: require login, password protect, security, limit access, control access, members, visitors, subscribers
 Requires at least: 3.8.1
-Tested up to: 4.1
-Stable tag: 0.1.1
+Tested up to: 4.2.2
+Stable tag: 0.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,13 +35,20 @@ Overview:
   Plugin will still allow unauthenticated downloading of site's feeds, but
   will filter out all login-requiring posts from the feed listings.
 
+  Plugin will protect the titles and contents of login-requiring posts in
+  search result page listings when the user is not logged in.  The titles /
+  contents will be replaced by text "[Post title / content protected by
+  LoginRequirePress.  Login to see the title / content.]"
+
 Technical summary:
 
   Plugin works by hooking-in special logic into the action 'send_headers' to
   redirect unauthenticated client browsers to the site's login page from any
-  non-feed page upon detecting any login-requiring post, and by hooking-in
-  another special logic into the filter 'posts_results' to filter out all
-  login-requiring posts from all feed page listings.
+  non-feed and non-search-results page upon detecting any login-requiring post,
+  and by hooking-in another special logic into the filter 'posts_results' to
+  filter out all login-requiring posts from all feed page listings, and to
+  protect the titles and contents of login-requiring posts in search result
+  page listings.
 
 Official project URLs:
 
@@ -75,3 +82,9 @@ Post issues / bugs / feature requests at: https://github.com/maratbn/LoginRequir
 
 = 0.1.1 =
 * Various documentation improvement.
+
+= 0.1.2 =
+* Minor improvement to plugin WordPress description meta field.
+* Fixed issue https://github.com/maratbn/LoginRequirePress/issues/2:  Added file 'REQUIREMENTS'.
+* Fixed issue https://github.com/maratbn/LoginRequirePress/issues/3:  Protecting the titles and
+  contents of login-requiring posts in search result page listings when the user is not logged in.

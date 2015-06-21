@@ -1,13 +1,14 @@
 <?php
 /*
   Plugin Name: LoginRequirePress
+  Plugin URI: https://wordpress.org/plugins/loginrequirepress
   Plugin URI: https://github.com/maratbn/LoginRequirePress
-  Plugin URI: http://www.maratbn.com/projects/login-require-press/
-  Description: WordPress plugin that allows site administrators to specifically designate arbitrary posts with any public post type as viewable only after user login.  Unauthenticated site visitors attempting to view any page that includes any such specifically designated post will then be automatically redirected to the site's default login page, and then back to the original page after they login, thereby limiting access only to logged-in users with subscriber roles and above.  Plugin will still allow unauthenticated downloading of site's feeds, but will filter out any login-requiring posts from the feed listings.
+  Plugin URI: http://www.maratbn.com/projects/login-require-press
+  Description: Allows site administrators to specifically designate arbitrary posts with any public post type as viewable only after user login.  Unauthenticated site visitors attempting to view any page that includes any such specifically designated post will then be automatically redirected to the site's default login page, and then back to the original page after they login, thereby limiting access only to logged-in users with subscriber roles and above.  Plugin will still allow unauthenticated downloading of site's feeds, but will filter out any login-requiring posts from the feed listings.  Plugin will protect the titles and contents of login-requiring posts in search result page listings when the user is not logged in.  The titles / contents will be replaced by text "[Post title / content protected by LoginRequirePress.  Login to see the title / content.]"
   Author: Marat Nepomnyashy
   Author URI: http://www.maratbn.com
   License: GPL3
-  Version: 0.1.1
+  Version: 0.1.2
   Text Domain: domain-plugin-LoginRequirePress
 */
 
@@ -28,12 +29,19 @@
                        site's feeds, but will filter out any login-requiring
                        posts from the feed listings.
 
+                       Plugin will protect the titles and contents of login-
+                       requiring posts in search result page listings when the
+                       user is not logged in.  The titles / contents will be
+                       replaced by text "[Post title / content protected by
+                       LoginRequirePress.  Login to see the title / content.]"
+
+  https://wordpress.org/plugins/loginrequirepress
   https://github.com/maratbn/LoginRequirePress
-  http://www.maratbn.com/projects/login-require-press/
+  http://www.maratbn.com/projects/login-require-press
 
   Copyright (C) 2015  Marat Nepomnyashy  http://maratbn.com  maratbn@gmail
 
-  Version:        0.1.1
+  Version:        0.1.2
 
   Module:         LoginRequirePress.php
 
@@ -121,6 +129,12 @@
         //  posts will be filtered out from inside each feed by the filter hook 'posts_results'.
         if ($w_p_query->is_feed) return;
 
+        //  Search result pages may contain login-requiring posts; however, as it would be
+        //  undesirable to completely deny access to the rest of the search results, the titles
+        //  and contents of login-requiring posts will be protected in search result page listings
+        //  by the filter hook 'posts_results'.
+        if ($w_p_query->is_search) return;
+
         global $post;
         if ($w_p_query->have_posts()) {
             while($w_p_query->have_posts()) {
@@ -142,15 +156,28 @@
     }
 
     function filter_posts_results($arrPosts) {
-        //  This logic is intended to filter out the login-protected posts from the site feeds.
+        //  This logic is intended to filter out the login-protected posts from the site feeds,
+        //  and to protect the contents and titles of login-requiring posts in search result
+        //  page listings when the user is not logged in.
 
-        //  Busting out if the current query is not for a feed:
-        if (!\is_feed()) return $arrPosts;
+        //  Busting out if the current query is not for a feed and not for a search result when
+        //  the user is not logged in:
+        $flagIsSearchNotLoggedIn = \is_search() && !\is_user_logged_in();
+        if (!(\is_feed() || $flagIsSearchNotLoggedIn)) return $arrPosts;
 
         $arrPostsFiltered = [];
 
         foreach ($arrPosts as $post) {
-            if (isLoginRequiredForPost($post)) continue;
+            if (isLoginRequiredForPost($post)) {
+                if ($flagIsSearchNotLoggedIn) {
+                    $post->post_content = __('[Post content protected by LoginRequirePress.  Login to see the content.]',
+                                             'domain-plugin-LoginRequirePress');
+                    $post->post_title = __('[Post title protected by LoginRequirePress.  Login to see the title.]',
+                                           'domain-plugin-LoginRequirePress');
+                } else {
+                    continue;
+                }
+            }
 
             array_push($arrPostsFiltered, $post);
         }
